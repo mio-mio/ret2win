@@ -40,6 +40,7 @@ This vulnerability exists because the program writes more data than the allocate
 
 A cyclic pattern (cyclic(100)) was generated and used as input in *GDB*.
 After the program crashed, the overwritten value was identified from the stack trace.
+![bt screenshot](./Screenshot2026-04-09201024.png)
 
 The offset to the return address was determined to be **40 bytes**.
 
@@ -56,6 +57,7 @@ The goal is to overwrite the return address with the address of the **ret2win** 
 ## 5. Payload Construction
 
 The payload consists of three parts: 'A' * offset + ret gadget + ret2win address
+
 This ensures correct alignment and redirects execution to **ret2win**.
 
 ## 6. Mitigation
@@ -67,7 +69,7 @@ If the canary is altered, the program terminates, preventing exploitation.
 
 ## 7. Result
 
-The exploit successfully redirects execution and reveals the flag: ROPE{a_placeholder_32bytes_flag}
+The exploit successfully redirects execution and reveals the flag: ROPE{a_placeholder_32bytes_flag!}
 
 ## 8. Lessons Learned
 
