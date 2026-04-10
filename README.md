@@ -14,7 +14,7 @@ From *objdump*, we can observe the following:
 
 - The **pwnme** function allocates 0x20 (**32 bytes**) on the stack but reads 0x38 (**56 bytes**) of input, making it vulnerable to buffer overflow.
 - The **ret2win** function prints a message and provides the desired functionality.
-
+![objdump screenshot](./Screenshot2026-04-09200509.png)
 
 ### 2.2 Stack Layout
 
