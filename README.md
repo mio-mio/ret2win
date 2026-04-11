@@ -47,12 +47,21 @@ The offset to the return address was determined to be **40 bytes**.
 This also matches the stack structure: 32 (buffer) + 8 (saved RBP) = 40
 
 ## 4. Exploitation Strategy
+### 4.1 Goal of this Challenge
 
 The goal is to overwrite the return address with the address of the **ret2win** function.
 
 - Fill the buffer up to the return address
 - Fix stack alignment using a ret gadget
 - Overwrite the return address with the target function
+
+### 4.2 Why This Strategy Works
+
+This strategy works because the program stores the return address on the stack, just above the local buffer. By providing input larger than the buffer size, we can overwrite data beyond its boundary, eventually reaching the saved return address.
+
+When the function returns, the CPU uses this overwritten address to determine where to continue execution. By replacing it with the address of the ret2win function, we redirect the program’s control flow.
+
+This is possible because there are no memory protections such as stack canaries or NX enabled in this challenge.
 
 ## 5. Payload Construction
 
