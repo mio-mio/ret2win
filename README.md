@@ -12,8 +12,8 @@ Using nm, we can identify functions such as main, pwnme, and ret2win.
 
 From *objdump*, we can observe the following:
 
-- The **pwnme** function allocates 0x20 (**32 bytes**) on the stack but reads 0x38 (**56 bytes**) of input, making it vulnerable to buffer overflow.
-- The **ret2win** function prints a message and provides the desired functionality.
+- The `pwnme` function allocates 0x20 (**32 bytes**) on the stack but reads 0x38 (**56 bytes**) of input, making it vulnerable to buffer overflow.
+- The `ret2win` function prints a message and provides the desired functionality.
 ![objdump screenshot](./Screenshot2026-04-09200509.png)
 
 ### 2.2 Stack Layout
@@ -49,10 +49,12 @@ This also matches the stack structure: 32 (buffer) + 8 (saved RBP) = 40
 ## 4. Exploitation Strategy
 ### 4.1 Goal of this Challenge
 
-The goal is to overwrite the return address with the address of the **ret2win** function.
+The goal is to overwrite the return address with the address of the `ret2win` function.
+
+The challenge conveniently provides a `ret2win` function, which is not normally reachable during execution but can be invoked by hijacking the control flow.
 
 - Fill the buffer up to the return address
-- Fix stack alignment using a ret gadget
+- Fix stack alignment using a ret gadget (ensures proper 16-byte stack alignment required by the x86_64 calling convention)
 - Overwrite the return address with the target function
 
 ### 4.2 Why This Strategy Works
@@ -67,7 +69,7 @@ This is possible because there are no memory protections such as stack canaries 
 
 The payload consists of three parts: 'A' * offset + ret gadget + ret2win address
 
-This ensures correct alignment and redirects execution to **ret2win**.
+This ensures correct alignment and redirects execution to `ret2win`.
 
 ## 6. Mitigation
 
@@ -86,3 +88,5 @@ The exploit successfully redirects execution and reveals the flag: ROPE{a_placeh
 - Input size must always be validated
 - Stack canaries are an effective mitigation technique
 - Intel and AT&T assembly syntaxes use different operand orders
+
+This demonstrates how a simple memory corruption vulnerability can lead to full control over program execution.
